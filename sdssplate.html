@@ -52,8 +52,8 @@
             //radius of plate holes (px)
             var rh = 4;
             //padding for spectra
-            var sppad = 10;
-            
+            var sppadx = 100;
+            var sppady = 20;
             
             //Get JSON plate data
             d3.json("plate3586.json", function(json) {
@@ -78,7 +78,14 @@
                     var x = obj["ra1"];
                     var y = obj["dec1"];
                     var cl = obj["class"];
-                    c.push([x, y, cl]);
+                    var plateID = obj["plate"];
+                    var mjd = obj["mjd"];
+                    var fiberID = obj["fiberID"];
+                    var run2d = obj["run2d"];
+                    var url = "http://api.sdss3.org/spectrum?plate=" + plateID
+                        + "&mjd=" + mjd + "&fiber=" + fiberID + "&run2d=" + run2d
+                        + "&format=json&fields=wavelengths,flux"
+                    c.push([x, y, cl, url]);
                 }
                 return c;
             }
@@ -134,8 +141,8 @@
                     })
                     .on("click", function(d) {
 
-d3.select(this)
-.attr("class", "hole");
+console.log(d[3]);
+draw_spectrum(d[3], 20, 1);
 
                     });
             }
@@ -173,10 +180,10 @@ d3.select(this)
                     var f = json["flux"];
                     var xSpecScale = d3.scale.linear()
                                         .domain(d3.extent(w))
-                                        .range([sppad, px - sppad]);
+                                        .range([px+sppadx, px+pw-sppadx]);
                     var ySpecScale = d3.scale.linear()
                                         .domain(d3.extent(f))
-                                        .range([sppad + (n+1)*(h - 2*sppad)/nspec, sppad + n*(h - 2*sppad)/nspec]);
+                                        .range([py-sppady, sppady]);
                     var path = "M " + xSpecScale(w[0]) + " " + ySpecScale(f[0]);
                     for(var i = 1; i < w.length; i++) {
                         path += " L " + xSpecScale(w[i]) + " " + ySpecScale(f[i]);
