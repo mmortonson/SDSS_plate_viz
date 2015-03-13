@@ -15,6 +15,11 @@
                 stroke: black;
                 stroke-width: 1;
             }
+            .hole_select {
+                fill: white;
+                stroke: black;
+                stroke-width: 1;
+            }
 	    .hole_galaxy {
                 fill: rgb(255, 150, 150);
                 stroke: rgb(200, 0, 0);
@@ -32,11 +37,11 @@
 	<script type="text/javascript">
 
 	    //SVG width and height
-	    var w = 500;
-	    var h = 500;
+	    var w = 700;
+	    var h = 700;
             //width and height of plate area and position of upper left corner
-            var pw = 300;
-            var ph = 300;
+            var pw = 500;
+            var ph = 500;
             var px = (w - pw) / 2;
             var py = (h - ph) / 2;
             //radius of plate (deg)
@@ -45,7 +50,7 @@
             var pra = 0;
             var pdec = 0;
             //radius of plate holes (px)
-            var rh = 2;
+            var rh = 4;
             //padding for spectra
             var sppad = 10;
             
@@ -57,7 +62,7 @@
                 pdec = data[0]["dec"];
                 var plate_holes = get_hole_coords(data);
                 draw_plate(plate_holes);
-                add_spectra(data);
+                //add_spectra(data);
             });
                                  
 	    //Create SVG element
@@ -110,6 +115,28 @@
                         } else {
                             return "hole";
                         }
+                    })
+                    .on("mouseover", function() {
+                        d3.select(this)
+                          .attr("class", "hole_select");
+                    })
+                    .on("mouseout", function(d) {
+                        d3.select(this)
+                          .attr("class", function(d) {
+                              if (d[2] == "GALAXY") {
+                                  return "hole_galaxy";
+                              } else if (d[2] == "QSO") {
+                                  return "hole_qso";
+                              } else {
+                                  return "hole";
+                              }
+                          })
+                    })
+                    .on("click", function(d) {
+
+d3.select(this)
+.attr("class", "hole");
+
                     });
             }
 			            
