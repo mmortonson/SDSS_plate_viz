@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>SDSS-III BOSS plate spectra</title>
-		<script type="text/javascript" src="d3/d3.v3.min.js"></script>
-		<style type="text/css">
+
+        <head>
+            <meta charset="utf-8">
+            <title>SDSS-III BOSS plate spectra</title>
+            <script type="text/javascript" src="d3/d3.v3.min.js"></script>
+            <style type="text/css">
             .plate {
                 fill: rgb(220, 220, 240);
                 stroke: black;
@@ -20,7 +21,7 @@
                 stroke: black;
                 stroke-width: 1;
             }
-	    .hole_galaxy {
+            .hole_galaxy {
                 fill: rgb(255, 150, 150);
                 stroke: rgb(200, 0, 0);
                 stroke-width: 1;
@@ -30,15 +31,16 @@
                 stroke: rgb(0, 0, 200);
                 stroke-width: 1;
             }
-		</style>
-	</head>
-	<body>
+            </style>
+        </head>
 
-	<script type="text/javascript">
+        <body>
 
-	    //SVG width and height
-	    var w = 700;
-	    var h = 700;
+        <script type="text/javascript">
+
+            //SVG width and height
+            var w = 700;
+            var h = 700;
             //width and height of plate area and position of upper left corner
             var pw = 500;
             var ph = 500;
@@ -62,14 +64,13 @@
                 pdec = data[0]["dec"];
                 var plate_holes = get_hole_coords(data);
                 draw_plate(plate_holes);
-                //add_spectra(data);
             });
                                  
-	    //Create SVG element
-	    var svg = d3.select("body")
-			.append("svg")
-			.attr("width", w)
-			.attr("height", h);
+            //Create SVG element
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h);
 
             function get_hole_coords(json) {
                 var c = [];
@@ -140,41 +141,13 @@
                           })
                     })
                     .on("click", function(d) {
-
-console.log(d[3]);
-draw_spectrum(d[3], 20, 1);
-
+                        console.log(d[3]);
+                        d3.selectAll("path").remove();
+                        draw_spectrum(d[3]);
                     });
             }
-			            
-            function add_spectra(json_plate) {
-                var url = "http://api.sdss3.org/spectrum";
-                var sendtext = "{'plate': '3586', 'mjd': '55181', 'fiber': '409', 'run2d': 'v5_5_12', 'fields': 'wavelengths,flux'}";
-                //var sendtext = "spectrum?plate=3586&mjd=55181&fiber=409&run2d=v5_5_12&format=json&fields=wavelengths,flux";
-                d3.xhr(url)
-                    .header("Content-Type", "application/json")
-                    .post(sendtext, function(error, json) {
-                        //if (error) return console.warn(error);
-                        console.log(sendtext);
-                        console.log(json);
-                });
-
-                //var nspec = json_plate.length;
-                var nspec = 20;
-                for(var sp = 0; sp < nspec; sp++) {
-                    var plateID = json_plate[sp]["plate"];
-                    var mjd = json_plate[sp]["mjd"];
-                    var fiberID = json_plate[sp]["fiberID"];
-                    var run2d = json_plate[sp]["run2d"];
-                    var url = "http://api.sdss3.org/spectrum?plate=" + plateID
-                        + "&mjd=" + mjd + "&fiber=" + fiberID + "&run2d=" + run2d
-                        + "&format=json&fields=wavelengths,flux"
-                    draw_spectrum(url, nspec, sp);
-                }
-
-            }
             
-            function draw_spectrum(url, nspec, n) {
+            function draw_spectrum(url) {
                 d3.json(url, function(json) {
                     var w = json["wavelengths"];
                     var f = json["flux"];
@@ -195,43 +168,9 @@ draw_spectrum(d[3], 20, 1);
                         .attr("fill", "none");
                 });
             }
-            
-            //d3.json("http://api.sdss3.org/spectrum?plate=3586&mjd=55181&fiber=409&run2d=v5_5_12&format=json&fields=wavelengths,flux", function(json) {
-                /*
-                d3.json("spec3586-55181-409.json", function(json) {
-                    console.log(json);
-                    var w = json["wavelengths"];
-                    var f = json["flux"];
-                    var xSpecScale = d3.scale.linear()
-                                        .domain(d3.extent(w))
-                                        .range([sppad, px - sppad]);
-                    var ySpecScale = d3.scale.linear()
-                                        .domain(d3.extent(f))
-                                        .range([sppad + (h - 2*sppad)/100, sppad]);
-                    var path = "M " + xSpecScale(w[0]) + " " + ySpecScale(f[0]);
-                    for(var i = 1; i < w.length; i++) {
-                        path += " L " + xSpecScale(w[i]) + " " + ySpecScale(f[i]);
-                    }
-                    svg.append("path")
-                        .attr("d", path)
-                        .attr("stroke", "black")
-                        .attr("stroke-width", 0.5)
-                        .attr("fill", "none");
-                    //draw_spectrum(json);
-                });
-                */
-                /*
-                // POST request (not working yet - was missing var before url defn, any other problems?)
-                // change to fill POST request values from json_plate
-                var url = "http://api.sdss3.org/spectrum"
-                var req = d3.xhr(url);
-                req.post({instrument: "boss", plate: "3586", mjd: "55181", fiber: "409", run2d: "v5_5_12", format: "json", fields: "wavelengths,flux"}, function(error, json) {
-                    if (error) return console.warn(error);
-                    console.log(json);
-                    //draw_spectrum(json);
-                });
-                */
-            
-		</script>
-	</body>
+
+        </script>
+
+        </body>
+
 </html>
