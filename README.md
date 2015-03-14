@@ -1,11 +1,10 @@
-## Interactive visualization of SDSS plate and spectra
+## Interactive visualization of an SDSS plate and spectra
 
 http://mmortonson.github.io/SDSS_plate_viz/
 
-The gray circle shown on the site above represents an aluminum "plug plate"
+The gray circle shown on the site above represents an aluminum ["plug plate"]
 used by the Sloan Digital Sky Survey (SDSS) to direct light from distant 
 galaxies onto optical fibers that carry the light to spectrographs.
-See [1] for a photo of an actual plate and more information.
 
 The colored dots represent the relative positions of 
 holes drilled in the plate to observe galaxies (red) and quasars (blue).
@@ -42,4 +41,4 @@ Spectra for the objects on this plate are accessed using the public
 
 [SQL search]: http://skyserver.sdss.org/dr12/en/tools/search/sql.aspx
 [SDSS API]: http://api.sdss3.org/
-[1]: http://classic.sdss.org/tour/plug_house.html
+["plug plate"]: http://classic.sdss.org/tour/plug_house.html
